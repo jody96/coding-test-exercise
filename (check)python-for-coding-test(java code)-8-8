@@ -1,0 +1,31 @@
+import java.util.*;
+import java.io.*;
+class Main {
+  public static void main(String[] args) throws Exception{
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st = new StringTokenizer(br.readLine());
+    int n = Integer.parseInt(st.nextToken());
+    int m = Integer.parseInt(st.nextToken());
+    int[] inputs = new int[n]; 
+    for(int i=0; i<n; i++){
+      inputs[i] = Integer.parseInt(br.readLine());
+    }
+    
+    int[] arr = new int[m+1];
+    
+    Arrays.fill(arr, 10001);
+    arr[0] = 0;
+    for(int i=0; i<n; i++){
+      int coin = inputs[i];
+      for(int j=1; j<=m; j++){
+        if((j-coin >= 0) && arr[j-coin] != 10001){
+          arr[j] = Math.min(arr[j], arr[j-coin]+1);
+        }  
+      }
+    }
+    int answer = arr[m];
+    if(arr[m] == 10001)
+      answer = -1;
+    System.out.println(answer);
+  }
+}
