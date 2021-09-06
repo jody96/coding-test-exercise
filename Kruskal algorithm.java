@@ -70,7 +70,7 @@ class Main {
     Collections.sort(edges);
 
     for(int i=0; i< edges.size(); i++){
-      int cost edges.get(i).getDistance();
+      int cost = edges.get(i).getDistance();
       int a = edges.get(i).getNodeA();
       int b = edges.get(i).getNodeB();
       if(findParent(a) != findParent(b)){
