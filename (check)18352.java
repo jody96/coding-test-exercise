@@ -1,54 +1,51 @@
 import java.util.*;
-
 class Main {
   public static int n, m, k, x;
-  public static ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
-  public static int[] d = new int[300001];
-
+  public static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
-
     n = sc.nextInt();
     m = sc.nextInt();
     k = sc.nextInt();
     x = sc.nextInt();
-
     for(int i=0; i<=n; i++){
       graph.add(new ArrayList<Integer>());
-      d[i]= -1;
     }
-
     for(int i=0; i<m; i++){
       int a = sc.nextInt();
       int b = sc.nextInt();
       graph.get(a).add(b);
     }
 
-    d[x] = 0;
+    int[] minArr = new int[n+1];
+    Arrays.fill(minArr, (int)1e9);
+    minArr[x] = 0;
+    Queue<Integer> queue = new LinkedList<>();
+    queue.add(x);
+    
+    while(!queue.isEmpty()){
+      int curr = queue.poll();
 
-    Queue<Integer> q = new LinkedList<Integer>();
-    q.offer(x);
-    while(!q.isEmpty()){
-      int now = q.poll();
-      for(int i=0; i<graph.get(now).size(); i++){
-        int nextNode = graph.get(now).get(i);
-        if(d[nextNode] == -1){
-          d[nextNode] = d[now] + 1;
-          q.offer(nextNode);
+      for(int i=0; i<graph.get(curr).size(); i++){
+        int next = graph.get(curr).get(i);
+        if(minArr[next] == (int)1e9){
+          minArr[next] = Math.min(minArr[next], minArr[curr] + 1);
+          queue.add(next);
         }
       }
     }
-    ArrayList<Integer> result = new ArrayList<>();
-    boolean check =false;
+    ArrayList<Integer> answer = new ArrayList<>();
     for(int i=1; i<=n; i++){
-      if(d[i] == k){
-        result.add(i);
-        check = true;
+      if(minArr[i] == k){
+        answer.add(i);
       }
     }
-    if(!check) System.out.println(-1);
-    Collections.sort(result);
-    for(int i=0; i<result.size(); i++)
-      System.out.println(result.get(i));
+    if(answer.size() == 0){
+      System.out.println(-1);
+      return;
+    }
+    Collections.sort(answer);
+    for(int i=0; i<answer.size(); i++)
+      System.out.println(answer.get(i));
   }
 }
