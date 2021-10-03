@@ -1,54 +1,68 @@
+//출처: https://buddev.tistory.com/37
 import java.util.*;
+import java.io.*;
+
 class Main {
-  public static int n,m;
-  public static int[][] graph = new int[51][51];
-  public static int rx;
-  public static int ry;
-  public static int dir;
-  public static int[][] vector = {{-1,0},{0,1},{1,0},{0,-1}}; 
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-    n = sc.nextInt();
-    m = sc.nextInt();
-    rx = sc.nextInt();
-    ry = sc.nextInt();
-    dir = sc.nextInt();
-    for(int i=0; i<n; i++){
-      for(int j=0; j<m; j++){
-        graph[i][j] = sc.nextInt();
+  private static int n,m,map[][];
+  private static int[] dx = {-1,0,1,0}, dy = {0,1,0,-1};
+  public static int clean(int x, int y, int d){
+    int dirCount = 0, clean = 0, nx, ny;
+    boolean flag = true;
+
+    while(flag){
+      if(map[x][y] = 0){
+        map[x][y] = 2;
+        clean++;
       }
-    }
-    int cnt = 1;
-    graph[rx][ry] = -1;
-    while(true){
-      int turn = 0;
-      while(turn < 4){
-        turn++;
-        dir = (dir + 3) % 4;
-        int nx = rx + vector[dir][0];
-        int ny = ry + vector[dir][1];
-        if(graph[nx][ny] == 0){
-          rx = nx;
-          ry = ny;
-          System.out.println(rx + " "+ ry);
-          graph[rx][ry] = -1;
-          cnt++;
-          break;
+      while(true){
+        if(dirCount == 4){
+          nx = x - dx[d];
+          ny = y - dy[d];
+          if(map[nx][ny] == 1){
+            flag = false;
+            break;
+          } else{
+            x = nx;
+            y = ny;
+            dirCount = 0;
+          }
         }
-      }
-      
-      if(turn == 4){
-        int back = (dir + 2) % 4;
-        int nx = rx + vector[back][0];
-        int ny = ry + vector[back][1];
-        if(graph[nx][ny] == -1){
-          rx = nx;
-          ry = ny;
+        d = (d+3) % 4;
+        nx = x + dx[d];
+        ny = y + dy[d];
+
+        if(map[nx][ny] == 0){
+          dirCount = 0;
+          x = nx;
+          y = ny;
+          break;
         } else{
-          break;
+          dirCount++;
+          continue;
         }
       }
     }
-    System.out.println(cnt);
+    return clean;
+  }
+  public static void main(String[] args) throws Exception{
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st = new StringTokenizer(br.readLine());
+    n = Integer.parseInt(st.nextToken());
+    m = Integer.parseInt(st.nextToken());
+    map = new int[n][m];
+
+    int x, y, d;
+    StringTokenizer st = new StringTokenizer(br.readLine());
+    x = Integer.parseInt(st.nextToken());
+    y = Integer.parseInt(st.nextToken());
+    d = Integer.parseInt(st.nextToken());
+
+    for(int i=0; i<n; i++){
+      st = new StringTokenizer(br.readLine());
+      for(int j=0; j<m; j++){
+        map[i][j] = Integer.parseInt(st.nextToken());
+      }
+    }
+    System.out.println(clean(x,y,d));
   }
 }
