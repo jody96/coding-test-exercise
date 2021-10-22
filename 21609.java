@@ -59,7 +59,7 @@ class Main {
     members.add(new Point(si, sj));
     visited[si][sj] = true;    
     int numberRainbow = 0;
-
+    ArrayList<Point> rainbows = new ArrayList<>();
     while(!queue.isEmpty()){
       Point curr = queue.poll();
       int currX = curr.x;
@@ -71,8 +71,10 @@ class Main {
         if(ni < 0 || ni >= n || nj < 0 || nj >= n || visited[ni][nj])
           continue;
         if(graph[ni][nj] != graph[si][sj]){
-          if(graph[ni][nj] == 0)
+          if(graph[ni][nj] == 0){
             numberRainbow++;
+            rainbows.add(new Point(ni, nj));
+          }
           else
             continue;
         }
@@ -90,6 +92,12 @@ class Main {
           break;
       }
       groups.add(new Group(numberRainbow, s, members));
+    }
+    if(numberRainbow > 0){
+      for(int i=0; i<rainbows.size(); i++){
+        Point rb = rainbows.get(i);
+        visited[rb.x][rb.y] = false;
+      }
     }
   }
   public static void turn(){
